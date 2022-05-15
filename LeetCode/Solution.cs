@@ -57,6 +57,7 @@ namespace LeetCode
         }
 
         /// <summary>
+        /// #0167 TWOSUMII
         /// Given a 1-indexed array of integers numbers that is already sorted in non-decreasing order, find two numbers such that they add up to a specific target number. 
         /// Let these two numbers be numbers[index1] and numbers[index2] where 1 <= index1 < index2 <= numbers.length.        
         /// Return the indices of the two numbers, index1 and index2, added by one as an integer array[index1, index2] of length 2.
@@ -91,20 +92,21 @@ namespace LeetCode
         /// <returns></returns>
         public int[] TwoSumII(int[] numbers, int target)
         {
-            var inputs = new Dictionary<int, int>();
+            var startIndex = 0;
+            var endIndex = numbers.Length - 1;
 
-            for (int i = 0; i < numbers.Length; i++)
+            while (numbers[startIndex] + numbers[endIndex] != target)
             {
-                var complimentaryNumber = target - numbers[i];
+                if(startIndex == endIndex)
+                    return new[] { -1, -1 };
 
-                if (inputs.ContainsKey(complimentaryNumber))
-                    return new int[] { inputs[complimentaryNumber]+1, i+1 };
-
-                if (!inputs.ContainsKey(numbers[i]))
-                    inputs.Add(numbers[i], i);
+                if (numbers[startIndex] + numbers[endIndex] > target)
+                    endIndex--;
+                else
+                    startIndex++;
             }
 
-            return new[] { -1, -1 };
+            return new[] { startIndex+1, endIndex+1 };
         }
     }
 }
