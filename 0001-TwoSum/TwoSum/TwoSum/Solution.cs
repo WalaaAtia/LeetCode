@@ -44,10 +44,7 @@ namespace TwoSum
                 {
                     return new int[] { inputs[complimentaryNumber], i };
                 }
-                else 
-                {
-                    inputs.Add(nums[i], i);
-                }                
+                inputs.Add(nums[i], i);
             }
 
             return new[] { -1, -1 };
