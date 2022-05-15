@@ -28,7 +28,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace TwoSum
+namespace LeetCode
 {
     public class Solution
     {

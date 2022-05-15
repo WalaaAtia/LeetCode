@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.32428.217
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TwoSum", "TwoSum\TwoSum.csproj", "{3BB1A055-E535-4977-BA9D-4538A3FB386B}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LeetCode", "TwoSum\LeetCode.csproj", "{3BB1A055-E535-4977-BA9D-4538A3FB386B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TwoSumTest", "TwoSumTest\TwoSumTest.csproj", "{CC05B6F5-2455-4369-93F8-EB1EC706943A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LeetCodeTest", "TwoSumTest\LeetCodeTest.csproj", "{CC05B6F5-2455-4369-93F8-EB1EC706943A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

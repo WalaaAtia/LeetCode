@@ -1,13 +1,13 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using TwoSum;
+using LeetCode;
 
-namespace TwoSumTest
+namespace LeetCodeTest
 {
     [TestClass]
-    public class UnitTest1
+    public class SolutionTest
     {
         [TestMethod]
-        public void SolutionTest()
+        public void TwoSum()
         {
             var solution = new Solution();
 
@@ -15,7 +15,6 @@ namespace TwoSumTest
 
             Assert.AreEqual(result[0], 0);
             Assert.AreEqual(result[1], 1);
-
 
             var result2 = (solution.TwoSum(new int[] { -6, 7, 11, 15 }, 9));
 
