@@ -22,6 +22,11 @@ namespace TwoSumTest
             Assert.AreEqual(result2[0], 0);
             Assert.AreEqual(result2[1], 3);
 
+            var result3 = (solution.TwoSum(new int[] { -6, -6, 15, 15 }, 9));
+
+            Assert.AreEqual(result3[0], 0);
+            Assert.AreEqual(result3[1], 2);
+
         }
     }
 }
