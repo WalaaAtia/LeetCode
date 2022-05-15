@@ -41,10 +41,10 @@ namespace TwoSum
                 var complimentaryNumber = target - nums[i];
 
                 if (inputs.ContainsKey(complimentaryNumber))
-                {
                     return new int[] { inputs[complimentaryNumber], i };
-                }
-                inputs.Add(nums[i], i);
+
+                if(!inputs.ContainsKey(nums[i]))
+                    inputs.Add(nums[i], i);
             }
 
             return new[] { -1, -1 };
