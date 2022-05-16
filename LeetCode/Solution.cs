@@ -231,24 +231,20 @@ namespace LeetCode
 
             for (int i = 0; i <= s.Length - concatenatedLength; i++)
             {
-                var wordsList = new List<string>(words);
+                var wordList = new List<string>(words);
                 var foundSegmentsIndexes = new HashSet<int>();
 
-                var segmentToExamine = s.Substring(i, segmentLength);
-
-                var segmentIndex = wordsList.FindIndex(x => x == segmentToExamine);
+                var segmentIndex = FindStringSegmentInWorldList(s, wordList, i, segmentLength);
                 if (segmentIndex < 0)
                     continue;
 
                 foundSegmentsIndexes.Add(segmentIndex);
-                wordsList[segmentIndex] = string.Empty;
+                wordList[segmentIndex] = string.Empty;
 
 
                 for (int nextSegmentIndex = i + segmentLength; nextSegmentIndex <= s.Length - segmentLength; nextSegmentIndex+= segmentLength)
                 {
-                    segmentToExamine = s.Substring(nextSegmentIndex, segmentLength);
-
-                    segmentIndex = wordsList.FindIndex(x => x == segmentToExamine);
+                    segmentIndex = FindStringSegmentInWorldList(s, wordList, nextSegmentIndex, segmentLength);
                     if (segmentIndex < 0)
                         break;
 
@@ -258,7 +254,7 @@ namespace LeetCode
                     if (foundSegmentsIndexes.Count == words.Length)
                         break;
 
-                    wordsList[segmentIndex] = string.Empty;
+                    wordList[segmentIndex] = string.Empty;
                 }
 
                 if (foundSegmentsIndexes.Count == words.Length)
@@ -266,6 +262,11 @@ namespace LeetCode
             }
 
             return result;
+        }
+        internal int FindStringSegmentInWorldList(string s, List<string> wordList, int startIndex, int segmentLength)
+        {
+            var segmentToExamine = s.Substring(startIndex, segmentLength);
+            return wordList.FindIndex(x => x == segmentToExamine);
         }
     }
     public class ListNode
