@@ -99,5 +99,18 @@ namespace LeetCodeTest
 
             Assert.AreEqual(result, 71);
         }
+
+        [TestMethod]
+        public void FindSubstringTest()
+        {            
+            var solution = new Solution();
+
+            var result = solution.FindSubstring("barfoothefoobarman", new string[] { "foo", "bar" });
+            Assert.AreEqual(result[0], 0);
+            Assert.AreEqual(result[1], 9);
+
+            var result2 = solution.FindSubstring("wordgoodgoodgoodbestword", new string[] { "word", "good", "best", "good" });
+            Assert.AreEqual(result2[0], 8);           
+        }
     }
 }

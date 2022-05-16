@@ -167,40 +167,105 @@ namespace LeetCode
             if (root.left == null && root.right == null)
                 return root.val;
 
-            var levelMaxMap = new Dictionary<short, int>();
-            var maxLevel = DeepestLeavesSum(root, 0, levelMaxMap);
+            var maxLevelSumPair = new ValueTuple<short, int>(0, 0);
+            DeepestLeavesSum(root, 0, ref maxLevelSumPair);
 
-            return levelMaxMap[maxLevel];
+            return maxLevelSumPair.Item2;
         }
 
-        public short DeepestLeavesSum(TreeNode root, short level, Dictionary<short, int> levelMaxMap)
+        public void DeepestLeavesSum(TreeNode root, short level, ref ValueTuple<short, int> maxLevelSumPair)
         {
-            var maxLevel = level;
-
-            if (levelMaxMap.ContainsKey(level))
+            if (level == maxLevelSumPair.Item1)
             {
-                levelMaxMap[level] += root.val;
+                maxLevelSumPair.Item2 += root.val;
             }
-            else
+            else if(level > maxLevelSumPair.Item1)
             {
-                levelMaxMap.Add(level, root.val);
+                maxLevelSumPair.Item1 = level;
+                maxLevelSumPair.Item2 = root.val;
             }
             
             level++;
             if (root.left != null)
             {
-                var maxBranchLevel = DeepestLeavesSum(root.left, level, levelMaxMap);
-                if (maxBranchLevel > maxLevel)
-                    maxLevel = maxBranchLevel;
+                DeepestLeavesSum(root.left, level, ref maxLevelSumPair);
             }
             if (root.right != null)
             {
-                var maxBranchLevel = DeepestLeavesSum(root.right, level, levelMaxMap);
-                if (maxBranchLevel > maxLevel)
-                    maxLevel = maxBranchLevel;
+                DeepestLeavesSum(root.right, level, ref maxLevelSumPair);
+            }
+        }
+
+        /// <summary>
+        /// #0030 FIND SUBSTRING
+        /// You are given a string s and an array of strings words of the same length. 
+        /// Return all starting indices of substring(s) in s that is a concatenation of each word in words exactly once, in any order, and without any intervening characters.
+        /// You can return the answer in any order.
+        /// Example 1:
+        /// Input: s = "barfoothefoobarman", words = ["foo","bar"]
+        /// Output: [0,9]
+        /// Explanation: Substrings starting at index 0 and 9 are "barfoo" and "foobar" respectively.
+        /// The output order does not matter, returning[9, 0] is fine too.
+        /// Example 2:
+        /// Input: s = "wordgoodgoodgoodbestword", words = ["word", "good", "best", "word"]
+        ///        Output: []
+        /// Example 3:
+        /// Input: s = "barfoofoobarthefoobarman", words = ["bar", "foo", "the"]
+        /// Output: [6,9,12]
+        /// </summary>
+        /// <param name="s"></param>
+        /// <param name="words"></param>
+        /// <returns></returns>
+        public IList<int> FindSubstring(string s, string[] words)
+        {
+            var result = new List<int>();            
+
+            if (string.IsNullOrEmpty(s) || words.Length == 0)
+                return result;
+
+            var segmentLength = words[0].Length;
+            var concatenatedLength = words.Length * segmentLength;
+
+            if (concatenatedLength > s.Length)
+                return result;
+
+            for (int i = 0; i <= s.Length - concatenatedLength; i++)
+            {
+                var wordsList = new List<string>(words);
+                var foundSegmentsIndexes = new HashSet<int>();
+
+                var segmentToExamine = s.Substring(i, segmentLength);
+
+                var segmentIndex = wordsList.FindIndex(x => x == segmentToExamine);
+                if (segmentIndex < 0)
+                    continue;
+
+                foundSegmentsIndexes.Add(segmentIndex);
+                wordsList[segmentIndex] = string.Empty;
+
+
+                for (int nextSegmentIndex = i + segmentLength; nextSegmentIndex <= s.Length - segmentLength; nextSegmentIndex+= segmentLength)
+                {
+                    segmentToExamine = s.Substring(nextSegmentIndex, segmentLength);
+
+                    segmentIndex = wordsList.FindIndex(x => x == segmentToExamine);
+                    if (segmentIndex < 0)
+                        break;
+
+                    if (!foundSegmentsIndexes.Add(segmentIndex))
+                        break;                                       
+
+                    if (foundSegmentsIndexes.Count == words.Length)
+                        break;
+
+                    wordsList[segmentIndex] = string.Empty;
+                }
+
+                if (foundSegmentsIndexes.Count == words.Length)
+                    result.Add(i);
             }
 
-            return maxLevel;
+            return result;
         }
     }
     public class ListNode
