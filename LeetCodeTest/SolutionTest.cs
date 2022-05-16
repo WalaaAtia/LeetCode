@@ -49,5 +49,55 @@ namespace LeetCodeTest
             Assert.AreEqual(result3[1], 2);
 
         }
+
+        [TestMethod]
+        public void AddTwoNumbersTest()
+        {
+            var solution = new Solution();
+
+            var l1 = new ListNode(2, new ListNode(4, new ListNode(3)));
+            var l2 = new ListNode(5, new ListNode(6, new ListNode(4)));
+
+            var result = solution.AddTwoNumbers(l1, l2);
+
+            Assert.AreEqual(result.val, 7);
+            Assert.AreEqual(result.next.val, 0);
+            Assert.AreEqual(result.next.next.val, 8);
+        }
+
+        [TestMethod]
+        public void AddTwoNumbersTest2()
+        {
+            var solution = new Solution();
+
+            var l1 = new ListNode(9, new ListNode(9, new ListNode(9, new ListNode(9, new ListNode(9, new ListNode(9, new ListNode(9)))))));
+            var l2 = new ListNode(9, new ListNode(9, new ListNode(9, new ListNode(9))));
+
+            var result = solution.AddTwoNumbers(l1, l2);
+
+            Assert.AreEqual(result.val, 8);
+            Assert.AreEqual(result.next.val, 9);
+            Assert.AreEqual(result.next.next.val, 9);
+            Assert.AreEqual(result.next.next.next.val, 9);
+            Assert.AreEqual(result.next.next.next.next.val, 0);
+            Assert.AreEqual(result.next.next.next.next.next.val, 0);
+            Assert.AreEqual(result.next.next.next.next.next.next.val, 0);
+            Assert.AreEqual(result.next.next.next.next.next.next.next.val, 1);
+        }
+
+        [TestMethod]
+        public void DeepestLeavesSumTest()
+        {
+            // [38,43,70,16,null,78,91,null,71,27,null,71,null,null,null,71] Expected 71
+            var solution = new Solution();
+
+            var node = new TreeNode(38, new TreeNode(43, 
+                new TreeNode(16, null, new TreeNode(71, null, null)), null), 
+                new TreeNode(70, new TreeNode(78,new TreeNode(27, new TreeNode(71, null, null), null),null), new TreeNode(91,new TreeNode(71, null, null),null)));
+
+            var result = solution.DeepestLeavesSum(node);
+
+            Assert.AreEqual(result, 71);
+        }
     }
 }

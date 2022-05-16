@@ -42,14 +42,14 @@ namespace LeetCode
         {
             var inputs = new Dictionary<int, int>();
 
-            for (int i=0; i< nums.Length; i++)
+            for (int i = 0; i < nums.Length; i++)
             {
                 var complimentaryNumber = target - nums[i];
 
                 if (inputs.ContainsKey(complimentaryNumber))
                     return new int[] { inputs[complimentaryNumber], i };
 
-                if(!inputs.ContainsKey(nums[i]))
+                if (!inputs.ContainsKey(nums[i]))
                     inputs.Add(nums[i], i);
             }
 
@@ -97,7 +97,7 @@ namespace LeetCode
 
             while (numbers[startIndex] + numbers[endIndex] != target)
             {
-                if(startIndex == endIndex)
+                if (startIndex == endIndex)
                     return new[] { -1, -1 };
 
                 if (numbers[startIndex] + numbers[endIndex] > target)
@@ -106,7 +106,124 @@ namespace LeetCode
                     startIndex++;
             }
 
-            return new[] { startIndex+1, endIndex+1 };
+            return new[] { startIndex + 1, endIndex + 1 };
+        }
+
+        /// <summary>
+        /// #0002 ADD TWO NUMBERS
+        /// You are given two non-empty linked lists representing two non-negative integers. 
+        /// The digits are stored in reverse order, and each of their nodes contains a single digit. Add the two numbers and return the sum as a linked list.
+        /// You may assume the two numbers do not contain any leading zero, except the number 0 itself.
+        /// 
+        /// Example 1
+        /// Input: l1 = [2,4,3], l2 = [5,6,4]
+        /// Output: [7,0,8]
+        /// Explanation: 342 + 465 = 807.
+        /// </summary>
+        /// <param name="l1"></param>
+        /// <param name="l2"></param>
+        /// <returns></returns>
+        public ListNode AddTwoNumbers(ListNode l1, ListNode l2)
+        {
+            if (l1 == null && l2 == null)
+                return null;
+
+            var result = new ListNode();
+
+            var rightOperand = (l1 != null) ? l1.val : 0;
+            var leftOperand = (l2 != null) ? l2.val : 0;
+            var nextRightNode = (l1 != null) ? l1.next : null;
+            var nextLefttNode = (l2 != null) ? l2.next : null;
+
+            result.val = rightOperand + leftOperand;
+
+            if (result.val > 9)
+            {
+                result.val = result.val - 10;
+                nextRightNode = AddTwoNumbers(nextRightNode, new ListNode(1, null));
+            }
+
+            result.next = AddTwoNumbers(nextRightNode, nextLefttNode);
+
+            return result;
+        }
+
+        /// <summary>
+        /// #1302 Deepest Leaves Sum
+        /// Given the root of a binary tree, return the sum of values of its deepest leaves
+        /// 
+        /// Example:
+        /// Input: root = [1,2,3,4,5,null,6,7,null,null,null,null,8]
+        /// Output: 15
+        /// 
+        /// Constraints:
+        /// The number of nodes in the tree is in the range[1, 104].
+        /// 1 <= Node.val <= 100
+        /// </summary>
+        /// <param name="root"></param>
+        /// <returns></returns>
+        public int DeepestLeavesSum(TreeNode root)
+        {
+            if (root.left == null && root.right == null)
+                return root.val;
+
+            var levelMaxMap = new Dictionary<short, int>();
+            var maxLevel = DeepestLeavesSum(root, 0, levelMaxMap);
+
+            return levelMaxMap[maxLevel];
+        }
+
+        public short DeepestLeavesSum(TreeNode root, short level, Dictionary<short, int> levelMaxMap)
+        {
+            var maxLevel = level;
+
+            if (levelMaxMap.ContainsKey(level))
+            {
+                levelMaxMap[level] += root.val;
+            }
+            else
+            {
+                levelMaxMap.Add(level, root.val);
+            }
+            
+            level++;
+            if (root.left != null)
+            {
+                var maxBranchLevel = DeepestLeavesSum(root.left, level, levelMaxMap);
+                if (maxBranchLevel > maxLevel)
+                    maxLevel = maxBranchLevel;
+            }
+            if (root.right != null)
+            {
+                var maxBranchLevel = DeepestLeavesSum(root.right, level, levelMaxMap);
+                if (maxBranchLevel > maxLevel)
+                    maxLevel = maxBranchLevel;
+            }
+
+            return maxLevel;
+        }
+    }
+    public class ListNode
+    {
+        public int val;
+        public ListNode next;
+        public ListNode(int val = 0, ListNode next = null)
+        {
+            this.val = val;
+            this.next = next;
+        }
+    }
+
+    public class TreeNode
+    {
+        public int val;
+        public TreeNode left;
+        public TreeNode right;
+        public TreeNode(int val = 0, TreeNode left = null, TreeNode right = null)
+        {
+            this.val = val;
+            this.left = left;
+            this.right = right;
         }
     }
 }
