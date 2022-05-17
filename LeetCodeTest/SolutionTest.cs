@@ -112,5 +112,17 @@ namespace LeetCodeTest
             var result2 = solution.FindSubstring("wordgoodgoodgoodbestword", new string[] { "word", "good", "best", "good" });
             Assert.AreEqual(result2[0], 8);           
         }
+
+        [TestMethod]
+        public void IsPalindromeTest()
+        {
+            var solution = new Solution();
+
+            Assert.IsTrue(solution.IsPalindrome("A man, a plan, a canal: Panama"));
+            Assert.IsTrue(solution.IsPalindrome(" "));
+            Assert.IsFalse(solution.IsPalindrome("race a car"));
+
+        }
     }
 }
+

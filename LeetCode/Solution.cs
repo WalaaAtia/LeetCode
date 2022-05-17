@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Text.RegularExpressions;
 
 namespace LeetCode
 {
@@ -267,6 +269,30 @@ namespace LeetCode
         {
             var segmentToExamine = s.Substring(startIndex, segmentLength);
             return wordList.FindIndex(x => x == segmentToExamine);
+        }
+
+        /// <summary>
+        /// #0125 Valid Palindrome
+        /// A phrase is a palindrome if, after converting all uppercase letters into lowercase letters and removing all non-alphanumeric characters, it reads the same forward and backward. 
+        /// Alphanumeric characters include letters and numbers.
+        /// </summary>
+        /// <param name="s"></param>
+        /// <returns></returns>
+        public bool IsPalindrome(string s)
+        {
+            var processedString = new string(s.Where(ch => Char.IsLetterOrDigit(ch)).ToArray()).ToLower();
+
+            if (processedString.Equals(ReverseString(processedString)))
+                return true;
+
+            return false;
+        }
+
+        internal string ReverseString(string s)
+        {
+            var charArray = s.ToCharArray();
+            Array.Reverse(charArray);
+            return new string(charArray);
         }
     }
     public class ListNode
