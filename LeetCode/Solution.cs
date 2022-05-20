@@ -294,6 +294,283 @@ namespace LeetCode
             Array.Reverse(charArray);
             return new string(charArray);
         }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="x"></param>
+        /// <returns></returns>
+        public bool IsPalindrome(int x)
+        {
+            if (x < 0)
+                return false;
+
+            if (x < 10)
+                return true;
+
+            return (x == ReverseNumber(x));
+        }
+
+        internal int ReverseNumber(int x)
+        {
+            int y = 0;
+
+            while (x != 0)
+            {
+                y = y*10 + (x % 10);
+
+                x = x / 10;
+            }
+
+            return y;
+        }
+
+        /// <summary>
+        /// #0044 Wildcard Matching
+        /// Given an input string (s) and a pattern (p), implement wildcard pattern matching with support for '?' and '*' where:
+        /// '?' Matches any single character.
+        /// '*' Matches any sequence of characters (including the empty sequence).
+        /// The matching should cover the entire input string (not partial).
+        /// </summary>
+        /// <param name="s">input string</param>
+        /// <param name="p">matching pattern</param>
+        /// <returns></returns>
+        public bool IsMatch(string s, string p)
+        {
+            // If the pattern is exactly similar to the string, then it's a match
+            if (p == s)
+                return true;
+
+            // if the pattern doesn't have any wild card, and it's not similar to the string, then it's not a match.
+            if (p.IndexOf('*') == -1 && p.IndexOf('?') == -1)
+            {
+                if (s != p)
+                    return false;
+            }
+           
+            // if the pattern striped of any '*' has more characters than the string, then it's not a match.
+            if (s.Length < p.Replace("*", string.Empty).Length)
+                return false;
+
+
+            if (!p.Contains('*'))
+            {
+                if (s.Length != p.Length)
+                    return false;
+
+                return IsPatternWithoutAsterixExists(s, p);
+            }
+            else
+            {
+                p = RemoveDuplicateConsecutiveWildCard(p);
+
+                if (p == "*")
+                    return true;
+
+                if (string.IsNullOrEmpty(s) && string.IsNullOrEmpty(p.Replace("*", string.Empty)))
+                    return true;
+
+                if (IsMatch(s, p.Replace("*", string.Empty)))
+                    return true;
+
+                // if the pattern has only wild cards.
+                if (string.IsNullOrEmpty(p.Replace("*", string.Empty).Replace("?", string.Empty)))
+                {
+                    if (s.Length >= p.Replace("*", string.Empty).Length)
+                        return true;
+                }
+
+                // first character check
+                if (p[0] != '*' && p[0] != '?' && p[0] != s[0])
+                    return false;
+                // last character check
+                if (p[p.Length-1] != '*' && p[p.Length - 1] != '?' && p[p.Length - 1] != s[s.Length-1])
+                    return false;
+
+                if (p.StartsWith("*") && p.EndsWith("*") && !p.Substring(1, p.Length - 2).Contains('*'))
+                    return IsPatternWithoutAsterixExists(s, p.Substring(1, p.Length - 2));
+
+                if (p.StartsWith("*") && !p.EndsWith("*") && !p.Substring(1, p.Length - 2).Contains('*'))
+                    return IsPatternWithoutAsterixExists(s.Substring(s.Length-p.Length+1), p.Substring(1, p.Length - 1));
+
+                if (!p.StartsWith("*") && p.EndsWith("*") && !p.Substring(1, p.Length - 2).Contains('*'))
+                    return IsPatternWithoutAsterixExists(s.Substring(0, p.Length-1), p.Substring(0, p.Length - 1));
+                if (p.StartsWith('*'))
+                {
+                    for (int i = 0; i < s.Length; i++)
+                    {
+                        if (IsMatch(s.Substring(i), p.Substring(1)))
+                            return true;
+                    }
+                    return false;
+                }
+                
+            }
+
+            int stringIndex = 0, patternIndex = 0;
+
+            bool match = false;
+
+            while (stringIndex < s.Length && patternIndex < p.Length)
+            {
+                match = false;
+
+                if (p[patternIndex] != '?' && p[patternIndex] != '*' && p[patternIndex] != s[stringIndex])
+                    return false;
+
+                if (p[patternIndex] == s[stringIndex] || p[patternIndex] == '?')
+                {
+                    match = true;
+                    patternIndex++;
+                    stringIndex++;
+                }
+
+                else if (p[patternIndex] == '*')
+                {
+                    match = true;
+                    patternIndex++;
+
+                    // If '*' is the last character in the pattern, then it's a match.
+                    if (patternIndex >= p.Length)
+                        return true;
+
+                    // if the next character in the pattern is not a '?' and it's not to be found in the remaining part of the provided string, then it's not a match.
+                    var nextStringIndex = s.IndexOf(p[patternIndex], stringIndex);
+                    if (nextStringIndex < 0 && p[patternIndex] != '?')
+                        return false;
+
+                    // move the string index to the next character to examine.
+                    stringIndex = (nextStringIndex < 0)? stringIndex+=2 : nextStringIndex + 1;
+
+                    // look for other options for the next charachter match
+                    var nextSegmentStartIndex = stringIndex;
+                    while (nextSegmentStartIndex < s.Length)
+                    {
+                        nextStringIndex = s.IndexOf(p[patternIndex], nextSegmentStartIndex);
+                        if (nextStringIndex < 0 && p[patternIndex] != '?')
+                            break;
+
+                        if (nextStringIndex < 0)
+                            nextStringIndex = nextSegmentStartIndex;
+
+                        if (IsMatch(s.Substring(nextStringIndex), p.Substring(patternIndex)))
+                            return true;
+
+                        nextSegmentStartIndex++;
+                    }
+                    patternIndex++;                    
+                }
+
+                if (stringIndex < s.Length && patternIndex >= p.Length)
+                    return false;
+                if (stringIndex >= s.Length && patternIndex < p.Length && p.Substring(patternIndex).Replace("*", string.Empty).Length > 0)
+                    return false;
+            }
+
+            return match;
+        }
+
+        private string RemoveDuplicateConsecutiveWildCard(string s)
+        {
+            if (s.Length <= 1)
+                return s;
+
+            else if (s[0] == '*' && s[0] == s[1])
+                return RemoveDuplicateConsecutiveWildCard(s.Substring(1));
+            else
+                return s[0] + RemoveDuplicateConsecutiveWildCard(s.Substring(1));
+        }
+
+        private bool IsPatternWithoutAsterixExists(string s, string p)
+        {
+            if (s.Contains(p))
+                return true;
+
+            // If pattern has no single wildcards, then there is no match, otherwise the first check would have returned true.
+            else if (!p.Contains('?'))
+                return false;
+
+            // if the pattern has no other characters but '?' and the length of the pattern is less or equal to the string, then it's a match.
+            if (string.IsNullOrEmpty(p.Replace("?", string.Empty)) && (p.Length <= s.Length))
+                return true;
+
+            // in case the pattern has a mix of alphanumeric characters and '?' charcters.
+            var patternIndex = 0;
+            var stringIndex = 0;
+
+            while (stringIndex <= s.Length - p.Length)
+            {
+                // looking for a match to the first character in the pattern
+                // if the current string character doesn't match, move to the next string character
+                if (s[stringIndex] != p[patternIndex] && p[patternIndex] != '?')
+                {
+                    stringIndex++;
+                        continue;
+                }
+
+                // otherwise if the current string character matches the first character in the patters,
+                // then recursively examine the next string characters for matching with the rest of the pattern.
+                if (IsPatternWithoutAsterixExists(s.Substring(stringIndex + 1, p.Length - 1), p.Substring(patternIndex + 1)))
+                    return true;
+                else
+                    stringIndex++;
+            }
+
+            // If the call reaches here, then there was no match found.
+            return false;
+        }
+
+        /// <summary>
+        /// ou are given an m x n integer array grid. There is a robot initially located at the top-left corner (i.e., grid[0][0]). 
+        /// The robot tries to move to the bottom-right corner (i.e., grid[m-1][n-1]). The robot can only move either down or right at any point in time.
+        /// An obstacle and space are marked as 1 or 0 respectively in grid.A path that the robot takes cannot include any square that is an obstacle.
+        /// Return the number of possible unique paths that the robot can take to reach the bottom-right corner.
+        /// The testcases are generated so that the answer will be less than or equal to 2 * 109.
+        /// </summary>
+        /// <param name="obstacleGrid"></param>
+        /// <returns></returns>
+        public int UniquePathsWithObstacles(int[][] obstacleGrid)
+        {
+            var gridLength = obstacleGrid.Length;
+            var gridWidth = obstacleGrid[0].Length;
+
+            if (obstacleGrid[0][0] == 1)
+                return 0;
+
+            if (gridWidth == 1 && gridLength == 1)
+                return 1;
+
+            var rightObstacleGrid = new int[gridLength][]; // width--
+            var downObstacleGrid = new int[gridLength-1][]; // full width
+
+            for (int i = 0; i < gridLength; i++)
+            {
+                rightObstacleGrid[i] = new int[gridWidth -1];
+                
+                if(i != 0)
+                    downObstacleGrid[i-1] = new int[gridWidth];
+
+                for (int j = 0; j < gridWidth; j++)
+                {
+                    if (j != 0)
+                        rightObstacleGrid[i][j-1] = obstacleGrid[i][j];
+                    if(i !=0)
+                        downObstacleGrid[i-1][j] = obstacleGrid[i][j];
+                }
+            }
+            
+            var paths = 0;
+
+            // moving right.
+            if(gridWidth > 1)
+                paths += UniquePathsWithObstacles(rightObstacleGrid);
+
+            // moving down.
+            if(gridLength > 1)
+                paths += UniquePathsWithObstacles(downObstacleGrid);
+
+            return paths;
+        }
     }
     public class ListNode
     {

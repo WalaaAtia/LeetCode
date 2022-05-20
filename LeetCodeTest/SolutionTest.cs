@@ -123,6 +123,112 @@ namespace LeetCodeTest
             Assert.IsFalse(solution.IsPalindrome("race a car"));
 
         }
+
+        [TestMethod]
+        public void IsPalindromeNumberTest()
+        {
+            var solution = new Solution();
+
+            Assert.IsTrue(solution.IsPalindrome(121));
+            Assert.IsFalse(solution.IsPalindrome(123));
+            Assert.IsFalse(solution.IsPalindrome(-121));
+        }
+
+        [TestMethod]
+        public void IsMatchTest()
+        {
+            var solution = new Solution();
+
+            Assert.IsTrue(solution.IsMatch("aa", "*"));
+            Assert.IsTrue(solution.IsMatch("aa", "a*"));
+            Assert.IsTrue(solution.IsMatch("adceb","*a*b"));
+            Assert.IsFalse(solution.IsMatch("cb", "*a"));
+            Assert.IsFalse(solution.IsMatch("ac", "ab*"));
+            Assert.IsTrue(solution.IsMatch("", "********"));
+            Assert.IsTrue(solution.IsMatch("abcabczzzde", "*abc???de*"));
+            Assert.IsFalse(solution.IsMatch("acdcb", "a*c?b"));
+            Assert.IsTrue(solution.IsMatch("aaaa", "***a"));
+            Assert.IsFalse(solution.IsMatch("bcd", "??"));
+            Assert.IsTrue(solution.IsMatch("c", "*?*"));
+            Assert.IsFalse(solution.IsMatch("ab", "*a"));
+            Assert.IsFalse(solution.IsMatch("abc", "*ab"));
+            Assert.IsFalse(solution.IsMatch("abbbba", "a**a*?"));
+            Assert.IsFalse(solution.IsMatch("mississippi", "m??*ss*?i*pi"));
+            Assert.IsTrue(solution.IsMatch("ab", "*?*?*"));
+            Assert.IsTrue(solution.IsMatch("abcde", "*?*?*?*?"));
+            Assert.IsTrue(solution.IsMatch("ababbb", "**??a*"));
+            Assert.IsTrue(solution.IsMatch("bbaa","*?*b*"));
+            Assert.IsTrue(solution.IsMatch("xbya", "*b*a"));
+            //Assert.IsFalse(solution.IsMatch("babbbbaabababaabbababaababaabbaabababbaaababbababaaaaaabbabaaaabababbabbababbbaaaababbbabbbbbbbbbbaabbb"
+            //    ,"b**bb**a**bba*b**a*bbb**aba***babbb*aa****aabb*bbb***a"));
+            //Assert.IsFalse(solution.IsMatch("abbabaaabbabbaababbabbbbbabbbabbbabaaaaababababbbabababaabbababaabbbbbbaaaabababbbaabbbbaabbbbababababbaabbaababaabbbababababbbbaaabbbbbabaaaabbababbbbaababaabbababbbbbababbbabaaaaaaaabbbbbaabaaababaaaabb"
+            //    , "**aa*****ba*a*bb**aa*ab****a*aaaaaa***a*aaaa**bbabb*b*b**aaaaaaaaa*a********ba*bbb***a*ba*bb*bb**a*b*bb"));
+            //Assert.IsFalse(solution.IsMatch("aaaaaabbaabaaaaabababbabbaababbaabaababaaaaabaaaabaaaabababbbabbbbaabbababbbbababbaaababbbabbbaaaaaaabbaabbbbababbabbaaabababaaaabaaabaaabbbbbabaaabbbaabbbbbbbaabaaababaaaababbbbbaabaaabbabaabbaabbaaaaba"
+            //   , "*bbb**a*******abb*b**a**bbbbaab*b*aaba*a*b**a*abb*aa****b*bb**abbbb*b**bbbabaa*b**ba**a**ba**b*a*a**aaa"));
+            //Assert.IsFalse(solution.IsMatch("baaabbabbbaabbbbbbabbbaaabbaabbbbbaaaabbbbbabaaaaabbabbaabaaababaabaaabaaaabbabbbaabbbbbaababbbabaaabaabaaabbbaababaaabaaabaaaabbabaabbbabababbbbabbaaababbabbaabbaabbbbabaaabbababbabababbaabaabbaaabbba"
+            //   ,"*b*ab*bb***abba*a**ab***b*aaa*a*b****a*b*bb**b**ab*ba**bb*bb*baab****bab*bbb**a*a*aab*b****b**ba**abba"));
+            //Assert.IsFalse(solution.IsMatch("aabbbaabbabbbabbabbbaaabaaababbababaabbababaaaaabbaababbabaabbbaaabaaaabbbabaaabbabaaaaaaaababbaaaaabbbaabbabbaabbbbabbababbbabbbababbababaabaaabbababbababbbbaabaaababbbbbababbbbaaaaaaabbbabbbbbbabbaba"
+            //    , "**a*abbbb*a*ba****ba**a**a*ba**a****aaa**abaa****aa**aaaa*bbbbbaaa*bb**aaabaaaa*aab*ab*aaabbb*b**a*aa*a"));
+        }
+
+        [TestMethod]
+        public void UniquePathsWithObstaclesTest()
+        {
+            var solution = new Solution();
+
+            var grid = new int[3][];
+            grid[0] = new int[3] { 0, 0, 0 };
+            grid[1] = new int[3] { 0, 1, 0 };
+            grid[2] = new int[3] { 0, 0, 0 };
+            Assert.AreEqual(solution.UniquePathsWithObstacles(grid), 2);
+
+            grid = new int[3][];
+            grid[0] = new int[3] { 0, 0, 0 };
+            grid[1] = new int[3] { 0, 0, 1 };
+            grid[2] = new int[3] { 0, 0, 0 };
+            Assert.AreEqual(solution.UniquePathsWithObstacles(grid), 3);
+
+            grid = new int[2][];
+            grid[0] = new int[2] { 0, 0 };
+            grid[1] = new int[2] { 0, 1 };            
+            Assert.AreEqual(solution.UniquePathsWithObstacles(grid), 0);
+
+            grid = new int[29][];
+            grid[0] = new int[18] { 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0 };
+            grid[1] = new int[18] { 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 1, 0, 0 };
+            grid[2] = new int[18] { 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 1, 1, 0, 1 };
+            grid[3] = new int[18] { 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+            grid[4] = new int[18] { 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+            grid[5] = new int[18] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0 };
+            grid[6] = new int[18] { 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 1, 0, 1, 0, 0, 0, 0 };
+            grid[7] = new int[18] { 1, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0 };
+            grid[8] = new int[18] { 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0 };
+
+            grid[9] = new int[18] { 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0 };
+            grid[10] = new int[18] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+            grid[11] = new int[18] { 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0 };
+            grid[12] = new int[18] { 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0 };
+            grid[13] = new int[18] { 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0 };
+            grid[14] = new int[18] { 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1 };
+            grid[15] = new int[18] { 0, 1, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0 };
+            grid[16] = new int[18] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1 };
+
+
+            grid[17] = new int[18] { 1, 0, 1, 1, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 1, 0 };
+            grid[18] = new int[18] { 0, 0, 0, 1, 0, 0, 0, 0, 1, 1, 1, 0, 0, 1, 0, 1, 1, 0 };
+            grid[19] = new int[18] { 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+            grid[20] = new int[18] { 0, 1, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0 };
+            grid[21] = new int[18] { 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 1, 0, 1, 1, 1, 0, 0 };
+            grid[22] = new int[18] { 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 1 };
+            grid[23] = new int[18] { 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 1, 0, 1, 0 };
+            grid[24] = new int[18] { 1, 0, 0, 1, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+            grid[25] = new int[18] { 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+            grid[26] = new int[18] { 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0 };
+            grid[27] = new int[18] { 1, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 1 };
+            grid[28] = new int[18] { 1, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0 };
+
+            Assert.AreEqual(solution.UniquePathsWithObstacles(grid), 13594824);
+        }
     }
 }
 
