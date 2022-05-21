@@ -521,6 +521,7 @@ namespace LeetCode
         }
 
         /// <summary>
+        /// #0063 Unique Paths II
         /// ou are given an m x n integer array grid. There is a robot initially located at the top-left corner (i.e., grid[0][0]). 
         /// The robot tries to move to the bottom-right corner (i.e., grid[m-1][n-1]). The robot can only move either down or right at any point in time.
         /// An obstacle and space are marked as 1 or 0 respectively in grid.A path that the robot takes cannot include any square that is an obstacle.
@@ -537,39 +538,31 @@ namespace LeetCode
             if (obstacleGrid[0][0] == 1)
                 return 0;
 
+            obstacleGrid[0][0] = 1;
+
             if (gridWidth == 1 && gridLength == 1)
                 return 1;
 
-            var rightObstacleGrid = new int[gridLength][]; // width--
-            var downObstacleGrid = new int[gridLength-1][]; // full width
-
             for (int i = 0; i < gridLength; i++)
             {
-                rightObstacleGrid[i] = new int[gridWidth -1];
-                
-                if(i != 0)
-                    downObstacleGrid[i-1] = new int[gridWidth];
-
                 for (int j = 0; j < gridWidth; j++)
                 {
-                    if (j != 0)
-                        rightObstacleGrid[i][j-1] = obstacleGrid[i][j];
-                    if(i !=0)
-                        downObstacleGrid[i-1][j] = obstacleGrid[i][j];
+                    if (i == 0 && j == 0)
+                        continue;
+
+                    if (obstacleGrid[i][j] == 1)
+                        obstacleGrid[i][j] = 0;
+                    else
+                    {
+                        if(j > 0)
+                            obstacleGrid[i][j] += obstacleGrid[i][j - 1];
+                        if (i > 0)
+                            obstacleGrid[i][j] += obstacleGrid[i-1][j];
+                    }
                 }
             }
-            
-            var paths = 0;
 
-            // moving right.
-            if(gridWidth > 1)
-                paths += UniquePathsWithObstacles(rightObstacleGrid);
-
-            // moving down.
-            if(gridLength > 1)
-                paths += UniquePathsWithObstacles(downObstacleGrid);
-
-            return paths;
+            return obstacleGrid[gridLength-1][gridWidth-1];
         }
     }
     public class ListNode
